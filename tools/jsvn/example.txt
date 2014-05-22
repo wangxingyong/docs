@@ -1,0 +1,49 @@
+# printopt.py 
+# 打印出所有命令行参数
+import sys
+for i in range(len(sys.argv)):
+    print "sys.argv[%d] = %s" % (i, sys.argv[i])
+
+
+
+import os
+path = os.environ["PATH"]
+user = os.environ["USER"]
+editor = os.environ["EDITOR"]f = open('foo')
+
+
+# 以读取模式打开 'foo'
+f = open('foo','w')    # 以写模式打开 'foo'
+
+
+os.environ["FOO"] = "BAR"
+os.putenv("FOO","BAR")
+
+Python常用模块I
+http://blog.sina.com.cn/s/blog_417b97470100hml0.html
+
+
+def _restart(port, start_cmd):
+    cmd = 'ps aux | grep "memcached .* %s"' % port
+    p = subprocess.Popen(cmd, shell=True, close_fds=True, # 必须加上close_fds=True，否则子进程会一直存在
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdoutdata, stderrdata = p.communicate()
+    if p.returncode != 0:
+        return False, error_response(cmd, stderrdata)
+    for r in stdoutdata.split('\n'):
+        if cmd in r:
+            continue
+        break
+    if r:
+        pid = r.split()[1]
+        
+        cmd = 'kill %s' % pid
+        p = subprocess.Popen(cmd, shell=True, close_fds=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p.communicate()
+    p = subprocess.Popen(start_cmd, shell=True, close_fds=True,
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdoutdata, stderrdata = p.communicate()
+    if p.returncode != 0:
+        return False, error_response(cmd, stderrdata)
+    return True, None

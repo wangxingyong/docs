@@ -1,0 +1,173 @@
+#!/usr/bin/python
+
+import Log
+import re
+
+class SvnConfiguration:
+
+    def __init__(self):
+        self.svnPreList=[]
+        self.svnList=[]
+
+    def load(self, filename):
+        if filename == None:
+            return
+        try:
+            fp = open(filename)
+            self. _read(fp)
+        except IOError:
+            Log.error("read SvnConfiguration error filename= "+filename)
+            raise Exception, "read SvnConfiguration error filename= "+filename
+        fp.close()
+
+    def getSvnPre(self, appName):
+        return self._findAppSvn(self.svnPreList, appName)
+
+    def getSvn(self, appName):
+        return self._findAppSvn(self.svnList, appName)
+
+    def getLocalPath(self, appName):
+        svnUrl = self.getSvn(appName)
+#        print "SvnConfiguration svnUrl", svnUrl
+        if svnUrl == None:
+            svnUrl = self.getSvnPre(appName)
+        if svnUrl == None:
+            return None
+        return self._parseLocalPath(svnUrl)
+
+    def listAllPath(self):
+	localPaths=[]
+	for svnUrl in self.svnList:
+	    path = self._parseLocalPath(svnUrl)
+	    localPaths.append(path)
+	return localPaths
+
+    def _parseLocalPath(self,svnUrl):
+## old       pp = re.compile("(http://svn.alibaba-inc.com/repos/ali_intl/apps/)(.*)/[(branches)|(tags)|(trunk)]")
+## wrong        pp = re.compile("(http://svn.alibaba-inc.com/repos/[(ali_intl_share/share/)|(ali_sourcing/share/)|(ali_intl_share/)|(ali_sourcing/apps/web/)])(.*)/[(branches)|(tags)|(trunk)]")
+	reStr = "("
+	reStr += "http://svn.alibaba-inc.com/repos/"
+	reStr += "("
+
+	reStr += "ali_sourcing/system/business/"
+	reStr += "|ali_sourcing/system/technology/data_processing/apps/"
+	reStr += "|ali_sourcing/system/technology/data_processing/modules/"
+	reStr += "|ali_sourcing/system/technology/"
+	reStr += "|ali_sourcing/open/"
+	reStr += "|ali_intl_share/share/"
+	reStr += "|ali_sourcing/share/"
+	reStr += "|ali_sourcing/apps/(?!web/)"
+	reStr += "|ali_intl_share/"
+	reStr += "|ali_sourcing/apps/web/"
+	reStr += "|ali_platform/doris/"
+
+	reStr += ")"
+	reStr += ")"
+	reStr += "(.*)"
+	reStr += "/[(branches)|(tags)|(trunk)]"
+#	print reStr;
+        ##pp = re.compile("(http://svn.alibaba-inc.com/repos/(ali_sourcing/system/business/|ali_sourcing/system/technology/|ali_sourcing/open/|ali_intl_share/share/|ali_sourcing/share/|ali_sourcing/apps/(?!web/)|ali_intl_share/|ali_sourcing/apps/web/))(.*)/[(branches)|(tags)|(trunk)]")
+	pp = re.compile(reStr)
+#http://svn.alibaba-inc.com/repos/ali_sourcing/system/business/authentication/modules/assessment/trunk/
+        rs = pp.search(svnUrl)
+        if rs:
+#            print rs.group(3)
+            return rs.group(3)
+#            return None
+        else:
+            return None
+
+    def _findAppSvn(self, svnList, appName):
+        if appName == None:
+            return None
+
+        # http://svn.alibaba-inc.com/repos/ali_intl/apps/intl-biz/consign/branches/20101123_26249_1
+        # consign+/
+        #key = appName.replace('-','/') + "/";
+        key = appName
+        for svn in svnList:
+            index = svn.find(key)
+            if index != -1:
+                return svn
+
+        return None
+
+    def _read(self, fp):
+        currentList=None
+
+        while True:
+            line = fp.readline()
+            if not line:
+                break
+            # comment or blank line?
+            if line.strip() == '' or line[0] in '#;':
+                continue
+
+            line = line.strip()
+
+            if line == "[svn.pre]":
+                currentList = self.svnPreList
+            elif line == "[svn]":
+                currentList = self.svnList
+            elif currentList == None:
+                continue            
+            else:
+                currentList.append(line)
+
+
+def test():
+    c = SvnConfiguration()
+    c.load("work.config")
+    s = c.getSvn("myalibaba")
+    print s
+    s = c.getSvn("commons-udas")
+    print s
+
+    s = c.getSvnPre("myalibaba")
+    print s
+    s = c.getSvnPre("commons-udas")
+    print s
+
+def testLocalPath():
+    c = SvnConfiguration()
+    c.load("work.config")
+    path = c.getLocalPath("udas");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_intl/apps/intl-biz/consign/branches/20101123_26249_1");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_intl/apps/intl-biz/consign/tags/20101123_26249_1");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_intl/apps/intl-commons/udas/branches/20101216_26249_4");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_intl/apps/intl-standalone/databrusher/branches/20101216_26249_4");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_intl/apps/intl-standalone/databrusher/av/av/tags/20101216_26249_4");
+    print path
+
+
+def testLocalPathNew():
+    c = SvnConfiguration()
+#    c.load("work.config")
+#    path = c.getLocalPath("udas");
+#    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_sourcing/apps/web/intl-login/branches/20110518_55841_5");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_intl_share/intl-resources/branches/20110518_55841");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_sourcing/share/biz/account/impl/branches/20110518_55841_4");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_intl_share/share/web/biz/branches/20110518_55841_4");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_sourcing/apps/standalone/ganges/branches/20110518_55841_4");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_sourcing/system/business/authentication/modules/assessment/trunk/");
+    print path
+    path = c._parseLocalPath("http://svn.alibaba-inc.com/repos/ali_sourcing/system/technology/data_processing/apps/intl-dp-admin/trunk/");
+    print path
+
+
+
+#test()
+#testLocalPath()
+#testLocalPathNew()
+
