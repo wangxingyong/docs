@@ -1,0 +1,48 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+    echo "copyRepository work2"
+	exit 0;
+fi
+WORK=$1
+
+copyApp(){
+mkdirIfNotExist $2
+for name in `ls $1`;do
+	if [ "$name" == ".svn" ]; then 
+		continue
+	fi
+
+	file=$1/$name
+
+	if [ -L "$file" ]; then
+		echo "link file: $file"
+		continue
+	fi
+
+	if [ -f "$file" ]; then
+		echo "file $file to $2/$name"
+		ln -s $file $2/$name
+	fi
+
+	if [ -d "$file" ]; then
+		if [ -f "$1/project.jelly" ]; then
+			echo "dir $file to $2/$name"
+			ln -s $file $2/$name
+		else
+			copyApp $file $2/$name
+		fi
+    fi
+done
+}
+
+mkdirIfNotExist(){
+	if [ ! -d "$1" ]; then
+		mkdir $1
+	fi
+}
+
+ALIWORK=/home/leo/alibaba/work/intl-biz
+NEWDIR=/home/leo/${WORK}/work/intl-biz
+copyApp $ALIWORK $NEWDIR
+

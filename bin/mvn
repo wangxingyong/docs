@@ -1,0 +1,26 @@
+#!/bin/bash
+
+PWD="`pwd`"
+if [[ $PWD =~ ${MY_WORK_HOME}/work([0-9]+) ]] ; then
+	USER_HOME="${BASH_REMATCH[0]}"
+elif [[ $PWD =~ ${MY_WORK_HOME}/alibaba ]] ; then
+	USER_HOME="${MY_WORK_HOME}/alibaba"
+	USER_HOME="/home/leo"
+else
+	USER_HOME="/home/leo"
+fi
+
+##USER_HOME="/home/leo"
+echo "proxy user home is: $USER_HOME"
+
+#USER_HOME="/home/leo"
+
+# MAVEN_OPTS="-Duser.home="$1
+# #echo $MAVEN_OPTS
+# shift
+#/usr/ali-tool/apache-maven-2.2.1/bin/mvn $USER_HOME $@
+#jsvn resetlocalrepository
+# export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"
+#${M2_HOME}/bin/mvn $USER_HOME $@ -DdownloadSources=true -Dmaven.test.skip -Declipse.useProjectReferences=false -Dno.private.repo
+
+${M2_HOME}/bin/mvn $@ -DdownloadSources=true -Dmaven.test.skip -Declipse.useProjectReferences=false -Dno.private.repo

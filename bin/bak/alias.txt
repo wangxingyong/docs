@@ -1,0 +1,24 @@
+alias  l='ls -alh --color=auto'
+alias  ll='ls -alh --color=auto'
+alias  cls='clear'
+alias  dir='nautilus $PWD'
+alias  java6='$JAVA6_HOME/bin/java'
+alias  javadebug='$JAVADEBUG_HOME/bin/java'
+
+alias psj='echo "ps ax|grep java"; ps ax|grep java'
+
+alias  antxr='echo "antx -p RELEASE";antx -p RELEASE'
+
+export JAVA6_HOME=/usr/ali/jdk1.6.0_14
+export JAVADEBUG_HOME=/usr/tools/jdk-debug/jdk1.6.0_14/fastdebug
+
+export JAVA_HOME=/usr/ali/java
+export TOMCAT_HOME=/usr/ali/tomcat
+export ANTX_HOME=/usr/ali/antx/dist/antx
+export JBOSS_HOME=/usr/ali/jboss
+
+export CLASSPATH=.:$CLASSPATH
+PATH=$PATH:/usr/ali-tool/bin
+PATH=$PATH:$ANTX_HOME/bin:$JAVA_HOME/bin:$CATALINA_HOME/bin:$PATH:$HOME/bin
+export PATH
+

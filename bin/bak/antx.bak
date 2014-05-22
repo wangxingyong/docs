@@ -1,0 +1,17 @@
+#! /bin/bash
+
+PWD="`pwd`"
+
+if [[ $PWD =~ /home/leo/work([0-9]) ]] ; then
+	ANTX_CMD="antx${BASH_REMATCH[1]} $@"
+	echo $ANTX_CMD
+elif [[ $PWD =~ /home/leo/alibaba ]] ; then
+	ANTX_CMD="antxa $@"
+	echo $ANTX_CMD
+else
+	ANTX_CMD="antx00 $@"
+	echo "antx $@"
+fi
+
+eval $ANTX_CMD
+

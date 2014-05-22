@@ -1,0 +1,93 @@
+#!/bin/bash
+
+#-------------------------------------------------------------------
+#                    启动antx的脚本
+#
+#    需要设置如下环境变量：
+#
+#      JAVA_HOME           - JDK的安装路径
+#
+#    可选的环境变量包括：
+#
+#      ANTX_HOME_LOCAL     - AntX创建临时文件的地方
+#      ANTX_OPTS           - 作为JVM参数，被传递给java执行程序
+#-------------------------------------------------------------------
+ANTX_OPTS="$ANTX_OPTS -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.region=CN"
+
+PWD="`pwd`"
+if [[ $PWD =~ /home/leo/work([0-9]) ]] ; then
+	ANTX_OPTS="$ANTX_OPTS -Duser.home=${BASH_REMATCH[0]}"
+	echo "antx user home is: ${BASH_REMATCH[0]}"
+elif [[ $PWD =~ /home/leo/alibaba ]] ; then
+	ANTX_OPTS="$ANTX_OPTS -Duser.home=/home/leo/alibaba"
+	echo "antx user home is: /home/leo/alibaba"
+else
+	echo "antx user home is: /home/leo"
+fi
+
+
+
+# 判断是否在cygwin环境下
+cygwin=false;
+case "`uname`" in
+  CYGWIN*) cygwin=true ;;
+esac
+
+# 确定安装了java，并设置了JAVA_HOME环境变量.
+noJavaHome=false
+if [ -z "$JAVA_HOME" ] ; then
+    noJavaHome=true
+fi
+if $cygwin ; then
+    [ -n "$JAVA_HOME" ] &&
+        JAVA_HOME=`cygpath -u "$JAVA_HOME"`
+fi
+if [ ! -e "$JAVA_HOME/bin/java" ] ; then
+    noJavaHome=true
+fi
+if $noJavaHome ; then
+    echo "Error: JAVA_HOME environment variable is not set."
+    exit 1
+fi
+
+# 用该脚本的位置推断ANTX_HOME的路径.
+CURR_DIR=`pwd`
+cd `dirname "$0"`/..
+ANTX_HOME=`pwd`
+cd $CURR_DIR
+
+if [ -z "$ANTX_HOME" ] ; then
+    echo
+    echo 错误: 必须设置环境变量“ANTX_HOME”，指向ANTX的安装路径
+    echo
+    exit 1
+fi
+
+ANTX_CLASSPATH="$ANTX_HOME/lib/misc-classworlds-1.0_rc1_patched.jar"
+ANTX_MAIN_CLASS="com.werken.classworlds.Launcher"
+
+if $cygwin ; then
+    JAVA_HOME=`cygpath -w "$JAVA_HOME"`
+    ANTX_HOME=`cygpath -w "$ANTX_HOME"`
+    ANTX_CLASSPATH=`cygpath -p -w "$ANTX_CLASSPATH"`
+
+    [ -n "$ANTX_HOME_LOCAL" ] &&
+        ANTX_HOME_LOCAL=`cygpath -w "$ANTX_HOME_LOCAL"`
+fi
+
+if [ -n "$ANTX_HOME_LOCAL" ] ; then
+  ANTX_DEFAULT_OPTS="$ANTX_DEFAULT_OPTS -Dantx.home.local=$ANTX_HOME_LOCAL"
+fi
+
+LD_LIBRARY_PATH="$ANTX_HOME/lib/linux:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH"
+
+ANTX_DEFAULT_OPTS="$ANTX_DEFAULT_OPTS -Xmx160m"
+ANTX_DEFAULT_OPTS="$ANTX_DEFAULT_OPTS -Dantx.home=\"$ANTX_HOME\""
+ANTX_DEFAULT_OPTS="$ANTX_DEFAULT_OPTS -Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"
+ANTX_DEFAULT_OPTS="$ANTX_DEFAULT_OPTS -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"
+ANTX_DEFAULT_OPTS="$ANTX_DEFAULT_OPTS -Dtools.jar=\"$JAVA_HOME/lib/tools.jar\""
+ANTX_DEFAULT_OPTS="$ANTX_DEFAULT_OPTS -Dclassworlds.conf=\"$ANTX_HOME/bin/antx.classworlds\""
+ANTX_DEFAULT_OPTS="$ANTX_DEFAULT_OPTS -Djava.endorsed.dirs=\"$ANTX_HOME/lib/endorsed\""
+
+ANTX_CMD="exec \"$JAVA_HOME/bin/java\" $ANTX_DEFAULT_OPTS $ANTX_OPTS -classpath \"$ANTX_CLASSPATH\"  $ANTX_MAIN_CLASS $@ -l zh_CN:utf-8"
+eval $ANTX_CMD

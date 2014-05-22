@@ -1,0 +1,9 @@
+#!/bin/bash
+
+TIME=30
+if [ $# = 1 ]; then
+    TIME=$1
+fi
+read -n1 -t $TIME -p "Press any key to continue..."
+echo
+

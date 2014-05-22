@@ -1,0 +1,49 @@
+#!/usr/bin/python
+# -*- coding: gb2312 -*-
+import os
+
+servers={}
+servers["1"]=["login1.cm3.taobao.org","xingyong.wangxy","online server"]
+#servers["2"]=["10.20.160.173","admin","一组公共服务器hell05a"]
+#servers["3"]=["10.20.157.179","root","we server,sfhudson"]
+#servers["4"]=["10.20.157.178","admin","lei sir, hello1234/hell05a"]
+#servers["4"]=["10.20.157.179","mock","mock server,mock"]
+#servers["4"]=["10.20.142.44","admin","测试的av server. bopscrm/renyongjie  admin/admin0801"]
+#servers["5"]=["10.20.131.143","cdromnew","光盘线上系统,hello"]
+#servers["8"]=["10.249.197.168","admin","mock服务器, admin/Hell0!@#4"]
+
+#servers[" 110"]=["10.20.146.81","admin","hellohudson,/home/admin/dubbo_mock赵国涛 ASC搭的mock服务器"]
+#servers[" 111"]=["10.20.141.45","perf","perf,戴钻mock环境"]
+#servers["9"]=["10.16.44.11","root","wxy slax linux"]
+servers["2"]=["10.125.48.247","xingyong.wangxy","shipping carrier proxy"]
+
+#
+DDD='''
+1，用admin登录
+2，sudo su -
+'''
+
+
+def printServerInfo():
+    keys = servers.keys()
+    keys.sort()
+    for key in keys:
+        print key,": ",servers[key][0],"   ",unicode(servers[key][2], "cp936")
+
+printServerInfo()
+
+while True:
+    kb = raw_input("select option: ")
+    if kb == 'exit' or kb == '0':
+        print "bye !"
+        break
+    elif kb in servers.keys():
+        sconf = servers[kb]
+        cmd="ssh "+sconf[1]+"@"+sconf[0]
+        print cmd
+        os.system(cmd)
+        break
+#    else:
+#        print " error option."
+
+

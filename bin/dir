@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PWD="`pwd`"
+if [ $# = 1 ]; then
+    PWD=$1
+fi
+
+#echo $#
+#echo $PWD
+
+echo "open: "$PWD
+nautilus $PWD > /wxy/tools/log.dir 2>&1 &
+#nautilus $PWD

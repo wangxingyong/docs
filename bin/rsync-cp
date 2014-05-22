@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+#rsync -av --exclude=".svn" --exclude="project.xml" /usr/ali/alibaba/work/intl-login/all /home/wxy/temp
+#rsync -av --exclude-from=exclude.file /usr/ali/alibaba/work/intl-login/all /home/wxy/temp
+
+echo "" > exclude.file
+echo ".svn" >> exclude.file
+echo "target" >> exclude.file
+echo "debug" >> exclude.file
+echo "jbossdomain" >> exclude.file
+echo ".classpath" >> exclude.file
+echo ".project" >> exclude.file
+echo "logs" >> exclude.file
+
+#rsync -av --exclude-from=exclude.file $1 $2
+#rsync -av --exclude-from=exclude.file /usr/ali/alibaba/work/intl-search /home/wxy/temp/ali-work/work/
+
+rsync -av --exclude-from=exclude.file /usr/ali/alibaba/.antx/repository.project /home/wxy/temp/ali-work
+
+rm exclude.file
+

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+BASE_HOME="`pwd`"
+
+logs[0]=logs/sys/webx.log
+logs[2]=../logs/sys/webx.log
+logs[2]=deploy/logs/sys/webx.log
+logs[3]=../deploy/logs/sys/webx.log
+
+logs[4]=../work/out/logs/sys/webx.log
+logs[5]=../../work/out/logs/sys/webx.log
+logs[6]=../../../work/out/logs/sys/webx.log
+logs[7]=../../../../work/out/logs/sys/webx.log
+
+logs[8]=../work/out/logs/bopstp.log
+logs[9]=../../work/out/logs/bopstp.log
+logs[10]=../../../work/out/logs/bopstp.log
+logs[11]=../../../../work/out/logs/bopstp.log
+
+for log in ${logs[@]};do
+	if [ -f $log ]; then
+		echo -e "\033[35mlog file is : $BASE_HOME/$log"
+		echo -e "\033[0m"
+		tail -f $log
+		exit 0
+	fi
+done
+echo "not found the webx logs."
+

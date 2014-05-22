@@ -1,0 +1,73 @@
+#!/usr/bin/python
+import os
+import sys
+
+servers = []
+servers.append('hz-shippingbops-fb.cm3')
+servers.append('hz-shippingbops-web1-5u7.xyi')
+servers.append('hz-shippingbops-web2-5u7.xyi')
+servers.append('xxx')
+servers.append('hz-shippinggateway-fb.cm3')
+servers.append('hz-shippinggateway-web1.xyi')
+servers.append('hz-shippinggateway-web2.xyi')
+servers.append('xxx')
+servers.append('us-shippinggateway-fb.scl')
+servers.append('us-shippinggateway-web1.scl')
+servers.append('us-shippinggateway-web2.scl')
+servers.append('xxx')
+servers.append('hz-shippingma-fb.cm3')
+servers.append('hz-shippingma-web1-5u7.xyi')
+servers.append('hz-shippingma-web2-5u7.xyi')
+servers.append('xxx')
+servers.append('us-shippingma-fb.hst.scl.en.alidc.net')
+servers.append('us-shippingma-web1.scl')
+servers.append('us-shippingma-web2.scl')
+servers.append('xxx')
+servers.append('hz-dataprocessing-fb.cm3')
+servers.append('hz-dataprocessing-worker1.hst.xyi.en.alidc.net')
+servers.append('hz-dataprocessing-worker2.hst.xyi.en.alidc.net')
+servers.append('xxx')
+servers.append('us-dataprocessing-fb.hst.scl.en.alidc.net')
+servers.append('us-dataprocessing-worker1.hst.scl.en.alidc.net')
+servers.append('us-dataprocessing-worker2.hst.scl.en.alidc.net')
+servers.append('xxx')
+servers.append('hz-dataprocessing-admin1.hst.xyi.en.alidc.net')
+servers.append('xxx')
+servers.append('us-dataprocessing-admin1.hst.scl.en.alidc.net')
+servers.append('us-dataprocessing-admin2.scl')
+
+
+def printServerInfo():
+	global servers
+	if(len(sys.argv) == 2):
+		ha= []
+		p = sys.argv[1]
+		for h in servers:
+			if p in h:
+				ha.append(h)
+		servers = ha
+
+	for i in range(len(servers)):
+		h = servers[i]
+		if h == 'xxx':
+			print ''
+		else:
+			print (i+1) , " : ", h
+
+printServerInfo()
+
+while True:
+    kb = raw_input("select option: ")
+    if kb == 'exit' or kb == '0':
+        print "bye !"
+        break
+    index = int(kb)-1
+    if index >=0 and index < len(servers):
+        cmd="ssh "+servers[index]
+        print cmd
+        os.system(cmd)
+        break
+#    else:
+#        print " error option."
+
+

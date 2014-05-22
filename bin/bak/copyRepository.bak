@@ -1,0 +1,59 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+    echo "copyRepository work2"
+	exit 0;
+fi
+WORK=$1
+
+linkRepository(){
+mkdirIfNotExist $2
+for name in `ls $1`;do
+	file=$1/$name
+
+	if [ -L "$file" ]; then
+		#echo "link file: $file"
+		continue
+	fi
+
+
+	if [ -f "$file" ]; then
+		#echo "$file to $2/$name"
+		if [ -L "$2/$name" ]; then
+			rm -rf $2/$name
+		fi
+		ln -s $file $2/$name
+	fi
+
+	if [ -d "$file" ]; then
+		if [ "$name" != ".svn" ]; then 
+			linkRepository $file $2/$name
+		fi
+    fi
+done
+}
+
+mkdirIfNotExist(){
+	if [ ! -d "$1" ]; then
+		mkdir $1
+	fi
+}
+
+
+
+ALIWORK=/usr/ali/alibaba/.antx/repository.project
+NEWDIR=$1/.antx/repository.project
+linkRepository $ALIWORK $NEWDIR
+
+
+
+#ALIWORK=/home/leo/alibaba/.antx/repository
+#NEWDIR=/home/leo/${WORK}/.antx/repository
+#linkRepository $ALIWORK $NEWDIR
+
+#ALIWORK=/usr/ali/alibaba/.antx/repository.project
+#NEWDIR=/home/leo/${WORK}/.antx/repository.project
+#NEWDIR=$1/.antx/repository.project
+#echo $NEWDIR
+#linkRepository $ALIWORK $NEWDIR
+

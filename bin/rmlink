@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+rmLink(){
+for name in `ls $1`;do
+	file=$1/$name
+
+	if [ -L "$file" ]; then
+		echo "rm link file: $file"
+		rm -rf $file
+		continue
+	fi
+
+	if [ -d "$file" ]; then
+		if [ "$name" != ".svn" ]; then 
+			rmLink $file $2/$name
+		fi
+    fi
+done
+}
+
+DIR=/home/leo/alibaba/work
+
+log call1
+echo $DIR
+echo 222
+
+#rmLink $DIR
+

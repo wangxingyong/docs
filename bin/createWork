@@ -1,0 +1,38 @@
+#!/bin/bash
+
+ALIWORK=/home/leo/alibaba/.antx/repository
+NEWDIR=/home/leo/work3/.antx/repository
+rm -rf $NEWDIR
+#len=`expr length $ALIWORK`
+
+lndir(){
+for name in `ls $1`;do
+	mmkdir $2
+	file=$1/$name
+
+	if [ -L "$file" ]; then
+		echo "link file: $file"
+		continue
+	fi
+
+	if [ -f "$file" ]; then
+		echo "$file to $2/$name"
+		ln -s $file $2/$name
+	fi
+
+	if [ -d "$file" ]; then
+		if [ "$name" != ".svn" ]; then 
+			lndir $file $2/$name
+		fi
+    fi
+done
+}
+
+mmkdir(){
+	if [ ! -d "$1" ]; then
+		mkdir $1
+	fi
+}
+
+lndir $ALIWORK $NEWDIR
+

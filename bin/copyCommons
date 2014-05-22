@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+    echo "copyCommons /home/leo/work0/work"
+	exit 0;
+fi
+
+NEWDIR=$1
+
+ln -s /usr/ali/alibaba/work/intl-base $NEWDIR
+ln -s /usr/ali/alibaba/work/intl-resources $NEWDIR
+ln -s /usr/ali/alibaba/work/intl-commons $NEWDIR
+ln -s /usr/ali/alibaba/work/intl-templates $NEWDIR
+ln -s /usr/ali/alibaba/work/statictpl  $NEWDIR
+

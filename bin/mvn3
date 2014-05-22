@@ -1,0 +1,24 @@
+#!/bin/bash
+
+PWD="`pwd`"
+if [[ $PWD =~ /home/leo/work([0-9]+) ]] ; then
+	USER_HOME="${BASH_REMATCH[0]}"
+elif [[ $PWD =~ /home/leo/alibaba ]] ; then
+	USER_HOME="/usr/ali/alibaba"
+elif [[ $PWD =~ /usr/ali/alibaba ]] ; then
+	USER_HOME="/usr/ali/alibaba"
+else
+	USER_HOME="/home/leo"
+fi
+echo "proxy user home is: $USER_HOME"
+
+#USER_HOME="/home/leo"
+
+# MAVEN_OPTS="-Duser.home="$1
+# #echo $MAVEN_OPTS
+# shift
+#/usr/ali-tool/apache-maven-2.2.1/bin/mvn $USER_HOME $@
+
+##/usr/ali-tool/apache-maven-3.0.1/bin/mvn $USER_HOME $@ -DdownloadSources=true -Dmaven.test.skip -Declipse.useProjectReferences=false
+/usr/ali-tool/apache-maven-3.0.1/bin/mvn $@ -DdownloadSources=true -Dmaven.test.skip -Declipse.useProjectReferences=false
+
