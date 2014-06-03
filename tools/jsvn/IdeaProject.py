@@ -7,11 +7,16 @@ class IdeaProject:
     def __init__(self, envContext, ideaImlPath):
     	self.envContext = envContext
         self._initSuccess = True;
-        self.ideaImlPath = ideaImlPath.replace("$PROJECT_DIR$", self.envContext.getHomeDir())
+        self.ideaImlPath = _resolveIdeaImlRealPath(ideaImlPath, self.envContext.getHomeDir())
         self.ideaProjectName = None
         self._parseLocation()
         self._initClassPath()
         self._initMaven()
+	
+	#$PROJECT_DIR$/work/shipping/ordernotice/modules.shipping.ordernotice-1.0.0.iml
+	#$PROJECT_DIR$/../work/shipping/solution/modules.shipping.solution-1.0.42.iml
+
+	
 
     def isInitSuccess(self):
         return self._initSuccess
@@ -25,7 +30,7 @@ class IdeaProject:
         if(not os.path.exists(realImlPath)):
             self._initSuccess = False;
             return
-#$PROJECT_DIR$/work/shipping/carrier/modules.shipping.carrier.iml
+
         ia = realImlPath.rfind('/')
         self.projectRealDir = realImlPath[0:ia]
        	self.ideaProjectName = realImlPath[ia+1:len(realImlPath)-4]
@@ -59,3 +64,6 @@ class IdeaProject:
         return self.maven.getGroupArtifactIdPath()
 
 
+def _resolveIdeaImlRealPath(ideaImlPath, homeDir):
+	iwork = ideaImlPath.find('/work')
+	return homeDir + ideaImlPath[iwork:len(ideaImlPath)]
