@@ -65,5 +65,5 @@ class IdeaProject:
 
 
 def _resolveIdeaImlRealPath(ideaImlPath, homeDir):
-	iwork = ideaImlPath.find('/work')
+	iwork = ideaImlPath.find('/work/')
 	return homeDir + ideaImlPath[iwork:len(ideaImlPath)]
