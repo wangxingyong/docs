@@ -335,7 +335,12 @@ class IdeaClasspathProjectReplace(CommandBase):
         self._help = "replace ecipse classpath to project" 
 
     def run(self, envContext):
-        workspace = envContext.getHomeDir()+"/inner_workspace"
+    	workspace = envContext.getHomeDir()+"/inner_workspace"
+    	
+    	selfIdeaWorkspace = envContext.getArgs().getOption("ideaWorkspace")
+    	if(selfIdeaWorkspace != None and os.path.exists(selfIdeaWorkspace+"/.idea")):
+    		workspace = selfIdeaWorkspace
+#		print "idea workspace:",workspace
         ep = IdeaWorkspace(workspace, envContext)
         ep.doReplaceProject()
 

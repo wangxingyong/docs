@@ -5,6 +5,7 @@ from ProjectXml import ProjectXml
 
 class IdeaProject:
     def __init__(self, envContext, ideaImlPath):
+#    	print "ideaImlPath:",ideaImlPath
     	self.envContext = envContext
         self._initSuccess = True;
         self.ideaImlPath = _resolveIdeaImlRealPath(ideaImlPath, self.envContext.getHomeDir())
@@ -12,6 +13,7 @@ class IdeaProject:
         self._parseLocation()
         self._initClassPath()
         self._initMaven()
+#        print "ideaImlPath:",self.ideaImlPath
 	
 	#$PROJECT_DIR$/work/shipping/ordernotice/modules.shipping.ordernotice-1.0.0.iml
 	#$PROJECT_DIR$/../work/shipping/solution/modules.shipping.solution-1.0.42.iml
