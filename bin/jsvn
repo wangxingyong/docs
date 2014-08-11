@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cmd="/wxy/tools/jsvn/Start.py $@"
+cmd="${JSVN_HOME}/Start.py $@"
 
 #echo $cmd
 
@@ -11,6 +11,8 @@ if [[ $PWD =~ ${MY_WORK_HOME}/work([0-9]+) ]] ; then
 	USER_HOME="${BASH_REMATCH[0]}"
 elif [[ $PWD =~ ${MY_WORK_HOME}/alibaba ]] ; then
 	USER_HOME="${MY_WORK_HOME}/alibaba"
+elif [[ $PWD =~ ${MY_WORK_HOME}/wxy ]] ; then
+	USER_HOME="${MY_WORK_HOME}/wxy"
 else
 	USER_HOME=""
 fi

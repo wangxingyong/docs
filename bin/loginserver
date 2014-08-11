@@ -17,6 +17,7 @@ servers["1"]=["login1.cm3.taobao.org","xingyong.wangxy","online server"]
 #servers["9"]=["10.16.44.11","root","wxy slax linux"]
 #servers["2"]=["10.125.48.247","xingyong.wangxy","shipping carrier proxy"]
 servers["2"]=["10.125.201.9","8080","tiger test"]
+servers["3"]=["10.125.10.49","xingyong.wangxy", "wxy server"]
 
 #
 DDD='''

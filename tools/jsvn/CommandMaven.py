@@ -19,11 +19,11 @@ class MavenBase(CommandBase):
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<parent>
+	<!--parent>
 		<groupId>com.alibaba.intl.sourcing.shared</groupId>
 		<artifactId>intl.base</artifactId>
 		<version>3.0.640</version>
-	</parent>
+	</parent-->
 
 	<artifactId>alibaba.intl.jsvn.all.pom</artifactId>
 	<packaging>pom</packaging>
@@ -95,19 +95,19 @@ class Idea(MavenBase):
     def init(self):
 	MavenBase.init(self)
         self._commandName = "idea"
-        self._help = "mvn idea:idea-DdownloadSources=true" 
+        self._help = "mvn idea:module -DdownloadSources=true" 
 
     def _execCmd(self,envContext, pomDir):
-	cmd = "cd "+pomDir+ "; mvn idea:idea"
+	cmd = "cd "+pomDir+ "; mvn idea:module"
         sr = self.execCommandStdout(envContext, cmd, "idea")
 
     def runAppdddd(self, envContext, app):
         appConfig = app.getAppConfig()
         if app.isBiz():
-            cmd = "cd "+app.getWorkDir()+ "; mvn idea:idea"
+            cmd = "cd "+app.getWorkDir()+ "; mvn idea:module"
             sr = self.execCommandStdout(envContext, cmd, app.getId())
         else:
-            cmd = "cd "+app.getWorkDir()+ "/all; mvn idea:idea"
+            cmd = "cd "+app.getWorkDir()+ "/all; mvn idea:module"
             sr = self.execCommandStdout(envContext, cmd, app.getId())
 
         return sr

@@ -14,7 +14,9 @@ def initCommand():
     CommandFactory.registerCommand(Command.OpenConfig())
     CommandFactory.registerCommand(Command.RmLogs())
     CommandFactory.registerCommand(Command.ResetWorkSpace())
-    CommandFactory.registerCommand(Command.ResetLocalRepository())
+    CommandFactory.registerCommand(Command.NewWorkSpace())
+    
+#    CommandFactory.registerCommand(Command.ResetLocalRepository())
 #    CommandFactory.registerCommand(Command.ResetLocalRepositoryAntx())
     CommandFactory.registerCommand(Command.MsgWorkSpace())
 #    CommandFactory.registerCommand(Command.EclipseClasspathProjectReplace())
@@ -35,7 +37,7 @@ def initCommand():
     CommandFactory.registerCommand(CommandSvn.MergeCI())
 
     CommandFactory.registerCommand(CommandMaven.MavenInstall())
-#    CommandFactory.registerCommand(CommandMaven.Idea())
+    CommandFactory.registerCommand(CommandMaven.Idea())
     CommandFactory.registerCommand(CommandMaven.Eclipse())
 #    CommandFactory.registerCommand(CommandMaven.EclipseProject())
 

@@ -164,6 +164,22 @@ class RmLogs(CommandBase):
         cmd = "rm -rf "+envContext.getLogDir()+"/*; mkdir -p "+envContext.getLogDir()
         return self.execCommandFile(envContext, cmd)
 
+class NewWorkSpace(CommandBase):
+    def init(self):
+        self._commandName = "newwork"
+        self._help = "create a new work space" 
+    def run(self, envContext):
+        msg = envContext.getArgs().getParameter(0, None)
+        if msg==None:
+            print "pelease set message param..."
+            return
+
+        nowTime=time.strftime('%Y-%m-%d_%H-%M-%S',time.localtime(time.time()))
+        msg=msg+"_"+nowTime
+        cmd = "createNewWorkSpaceIDEA "+envContext.getHomeDir()+" "+ msg+";"
+
+        rs = self.execCommandStdout(envContext, cmd)
+        return rs
 
 class ResetWorkSpace(CommandBase):
     def init(self):
@@ -337,7 +353,10 @@ class IdeaClasspathProjectReplace(CommandBase):
     def run(self, envContext):
     	workspace = envContext.getHomeDir()+"/inner_workspace"
     	
-    	selfIdeaWorkspace = envContext.getArgs().getOption("ideaWorkspace")
+    	selfIdeaWorkspace = os.getcwd()
+    	if(not os.path.exists(selfIdeaWorkspace+"/.idea")):
+    		selfIdeaWorkspace = envContext.getArgs().getOption("ideaWorkspace")
+
     	if(selfIdeaWorkspace != None and os.path.exists(selfIdeaWorkspace+"/.idea")):
     		workspace = selfIdeaWorkspace
 #		print "idea workspace:",workspace
