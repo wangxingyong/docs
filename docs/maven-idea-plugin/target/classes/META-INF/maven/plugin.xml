@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <description></description>
+  <groupId>com.wxy.maven</groupId>
+  <artifactId>maven-idea-plugin</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <goalPrefix>idea</goalPrefix>
+  <isolatedRealm>false</isolatedRealm>
+  <inheritedByDefault>true</inheritedByDefault>
+  <mojos>
+    <mojo>
+      <goal>clean</goal>
+      <description>Removes all existing IDEA files for the project.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.apache.maven.plugin.idea.IdeaCleanMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <project implementation="org.apache.maven.project.MavenProject">${project}</project>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>module</goal>
+      <description>Creates the module files (*.iml) for IntelliJ IDEA.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <executePhase>generate-sources</executePhase>
+      <implementation>org.apache.maven.plugin.idea.IdeaModuleMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>dependenciesAsLibraries</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Causes the module libraries to use a short name for all dependencies. This is very convenient but has been
+reported to cause problems with IDEA.</description>
+        </parameter>
+        <parameter>
+          <name>deploymentDescriptorFile</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the location of the deployment descriptor file, if one is provided.</description>
+        </parameter>
+        <parameter>
+          <name>downloadJavadocs</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Enables/disables the downloading of javadoc attachments.</description>
+        </parameter>
+        <parameter>
+          <name>downloadSources</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Enables/disables the downloading of source attachments.</description>
+        </parameter>
+        <parameter>
+          <name>exclude</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>A comma-separated list of directories that should be excluded. These directories are in addition to those
+already excluded, such as target.</description>
+        </parameter>
+        <parameter>
+          <name>executedProject</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The Maven Project.</description>
+        </parameter>
+        <parameter>
+          <name>ideaPlugin</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Tell IntelliJ IDEA that this module is an IntelliJ IDEA Plugin.</description>
+        </parameter>
+        <parameter>
+          <name>ideaVersion</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the version of IDEA to target. This is needed to identify the default formatting of
+project-jdk-name used by IDEA. Currently supports 4.x and 5.x.
+&lt;p/&gt;
+This will only be used when parameter jdkName is not set.</description>
+        </parameter>
+        <parameter>
+          <name>javadocClassifier</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Sets the classifier string attached to an artifact javadoc archive name.</description>
+        </parameter>
+        <parameter>
+          <name>libraries</name>
+          <type>org.apache.maven.plugin.idea.Library[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>An optional set of Library objects that allow you to specify a comma separated list of source dirs, class dirs,
+or to indicate that the library should be excluded from the module. For example:
+&lt;p/&gt;
+&lt;pre&gt;
+&amp;lt;libraries&amp;gt;
+&amp;lt;library&amp;gt;
+&amp;lt;name&amp;gt;webwork&amp;lt;/name&amp;gt;
+&amp;lt;sources&amp;gt;file://$webwork$/src/java&amp;lt;/sources&amp;gt;
+&amp;lt;!--
+&amp;lt;classes&amp;gt;...&amp;lt;/classes&amp;gt;
+&amp;lt;exclude&amp;gt;true&amp;lt;/exclude&amp;gt;
+--&amp;gt;
+&amp;lt;/library&amp;gt;
+&amp;lt;/libraries&amp;gt;
+&lt;/pre&gt;</description>
+        </parameter>
+        <parameter>
+          <name>linkModules</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether to link the reactor projects as dependency modules or as libraries.</description>
+        </parameter>
+        <parameter>
+          <name>localRepo</name>
+          <type>org.apache.maven.artifact.repository.ArtifactRepository</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>overwrite</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether to update the existing project files or overwrite them.</description>
+        </parameter>
+        <parameter>
+          <name>reactorProjects</name>
+          <type>java.util.List</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The reactor projects in a multi-module build.</description>
+        </parameter>
+        <parameter>
+          <name>sourceClassifier</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Sets the classifier string attached to an artifact source archive name.</description>
+        </parameter>
+        <parameter>
+          <name>useFullNames</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether to use full artifact names when referencing libraries.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <sourceClassifier implementation="java.lang.String" default-value="sources">${sourceClassifier}</sourceClassifier>
+        <dependenciesAsLibraries implementation="boolean" default-value="false"/>
+        <downloadJavadocs implementation="boolean" default-value="false">${downloadJavadocs}</downloadJavadocs>
+        <executedProject implementation="org.apache.maven.project.MavenProject">${executedProject}</executedProject>
+        <reactorProjects implementation="java.util.List">${reactorProjects}</reactorProjects>
+        <ideaPlugin implementation="boolean" default-value="false"/>
+        <javadocClassifier implementation="java.lang.String" default-value="javadoc">${javadocClassifier}</javadocClassifier>
+        <deploymentDescriptorFile implementation="java.lang.String">${deploymentDescriptorFile}</deploymentDescriptorFile>
+        <downloadSources implementation="boolean" default-value="false">${downloadSources}</downloadSources>
+        <linkModules implementation="boolean" default-value="true">${linkModules}</linkModules>
+        <overwrite implementation="boolean" default-value="false">${overwrite}</overwrite>
+        <localRepo implementation="org.apache.maven.artifact.repository.ArtifactRepository">${localRepository}</localRepo>
+        <useFullNames implementation="boolean" default-value="false">${useFullNames}</useFullNames>
+        <ideaVersion implementation="java.lang.String" default-value="5.x">${ideaVersion}</ideaVersion>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.artifact.manager.WagonManager</role>
+          <field-name>wagonManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.metadata.ArtifactMetadataSource</role>
+          <field-name>artifactMetadataSource</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.resolver.ArtifactResolver</role>
+          <field-name>artifactResolver</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.factory.ArtifactFactory</role>
+          <field-name>artifactFactory</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>help</goal>
+      <description>Display help information on maven-idea-plugin.&lt;br/&gt;
+Call &lt;code&gt;mvn idea:help -Ddetail=true -Dgoal=&amp;lt;goal-name&amp;gt;&lt;/code&gt; to display parameter details.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>false</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>org.apache.maven.plugin.idea.HelpMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>detail</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>If &lt;code&gt;true&lt;/code&gt;, display all settable properties for each goal.</description>
+        </parameter>
+        <parameter>
+          <name>goal</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the goal for which to show help. If unspecified, all goals will be displayed.</description>
+        </parameter>
+        <parameter>
+          <name>indentSize</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The number of spaces per indentation level, should be positive.</description>
+        </parameter>
+        <parameter>
+          <name>lineLength</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The maximum length of a display line, should be positive.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <detail implementation="boolean" default-value="false"/>
+        <indentSize implementation="int" default-value="2"/>
+        <lineLength implementation="int" default-value="80"/>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>workspace</goal>
+      <description>Creates the workspace file (*.iws) for IntelliJ IDEA.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <executePhase>generate-sources</executePhase>
+      <implementation>org.apache.maven.plugin.idea.IdeaWorkspaceMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>executedProject</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The Maven Project.</description>
+        </parameter>
+        <parameter>
+          <name>localRepo</name>
+          <type>org.apache.maven.artifact.repository.ArtifactRepository</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>overwrite</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether to update the existing project files or overwrite them.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <overwrite implementation="boolean" default-value="false">${overwrite}</overwrite>
+        <localRepo implementation="org.apache.maven.artifact.repository.ArtifactRepository">${localRepository}</localRepo>
+        <executedProject implementation="org.apache.maven.project.MavenProject">${executedProject}</executedProject>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.artifact.metadata.ArtifactMetadataSource</role>
+          <field-name>artifactMetadataSource</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.resolver.ArtifactResolver</role>
+          <field-name>artifactResolver</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.factory.ArtifactFactory</role>
+          <field-name>artifactFactory</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>project</goal>
+      <description>Creates the project file (*.ipr) for IntelliJ IDEA.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <executePhase>generate-sources</executePhase>
+      <implementation>org.apache.maven.plugin.idea.IdeaProjectMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>executedProject</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The Maven Project.</description>
+        </parameter>
+        <parameter>
+          <name>ideaVersion</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the version of IDEA to target. This is needed to identify the default formatting of
+project-jdk-name used by IDEA. Currently supports 4.x and 5.x.
+&lt;p/&gt;
+This will only be used when parameter jdkName is not set.</description>
+        </parameter>
+        <parameter>
+          <name>jdkLevel</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the version of the JDK to use for the project for the purpose of
+enabled assertions and Java 5.0 language features.
+The default value is the specification version of the executing JVM.</description>
+        </parameter>
+        <parameter>
+          <name>jdkName</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the name of the registered IDEA JDK to use
+for the project.</description>
+        </parameter>
+        <parameter>
+          <name>localRepo</name>
+          <type>org.apache.maven.artifact.repository.ArtifactRepository</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>overwrite</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether to update the existing project files or overwrite them.</description>
+        </parameter>
+        <parameter>
+          <name>wildcardResourcePatterns</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the resource pattern in wildcard format, for example &quot;?*.xml;?*.properties&quot;.
+Currently supports 4.x and 5.x.
+Because IDEA doesn&apos;t distinguish between source and resources directories, this is needed.
+The default value corresponds to any file without a java extension.
+Please note that the default value includes package.html files as it&apos;s not possible to exclude those.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <jdkName implementation="java.lang.String">${jdkName}</jdkName>
+        <overwrite implementation="boolean" default-value="false">${overwrite}</overwrite>
+        <jdkLevel implementation="java.lang.String">${jdkLevel}</jdkLevel>
+        <localRepo implementation="org.apache.maven.artifact.repository.ArtifactRepository">${localRepository}</localRepo>
+        <ideaVersion implementation="java.lang.String" default-value="5.x">${ideaVersion}</ideaVersion>
+        <wildcardResourcePatterns implementation="java.lang.String" default-value="!?*.java">${wildcardResourcePatterns}</wildcardResourcePatterns>
+        <executedProject implementation="org.apache.maven.project.MavenProject">${executedProject}</executedProject>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.artifact.metadata.ArtifactMetadataSource</role>
+          <field-name>artifactMetadataSource</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.resolver.ArtifactResolver</role>
+          <field-name>artifactResolver</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.factory.ArtifactFactory</role>
+          <field-name>artifactFactory</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>idea</goal>
+      <description>Goal for generating IDEA files from a POM.
+This plug-in provides the ability to generate project files (.ipr, .iml and .iws files) for IDEA.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <executePhase>generate-resources</executePhase>
+      <implementation>org.apache.maven.plugin.idea.IdeaMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>dependenciesAsLibraries</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Causes the module libraries to use a short name for all dependencies. This is very convenient but has been
+reported to cause problems with IDEA.</description>
+        </parameter>
+        <parameter>
+          <name>deploymentDescriptorFile</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the location of the deployment descriptor file, if one is provided.</description>
+        </parameter>
+        <parameter>
+          <name>downloadJavadocs</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Enables/disables the downloading of javadoc attachments.</description>
+        </parameter>
+        <parameter>
+          <name>downloadSources</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Enables/disables the downloading of source attachments.</description>
+        </parameter>
+        <parameter>
+          <name>exclude</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>A comma-separated list of directories that should be excluded. These directories are in addition to those
+already excluded, such as target/classes. A common use of this is to exclude the entire target directory.</description>
+        </parameter>
+        <parameter>
+          <name>executedProject</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The Maven Project.</description>
+        </parameter>
+        <parameter>
+          <name>ideaPlugin</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Tell IntelliJ IDEA that this module is an IntelliJ IDEA Plugin.</description>
+        </parameter>
+        <parameter>
+          <name>ideaVersion</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the version of IDEA to target. This is needed to identify the default formatting of
+project-jdk-name used by IDEA. Currently supports 4.x and 5.x.
+&lt;p/&gt;
+This will only be used when parameter jdkName is not set.</description>
+        </parameter>
+        <parameter>
+          <name>javadocClassifier</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Sets the classifier string attached to an artifact javadoc archive name.</description>
+        </parameter>
+        <parameter>
+          <name>jdkLevel</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the version of the JDK to use for the project for the purpose of
+enabled assertions and Java 5.0 language features.
+The default value is the specification version of the executing JVM.</description>
+        </parameter>
+        <parameter>
+          <name>jdkName</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the name of the registered IDEA JDK to use
+for the project.</description>
+        </parameter>
+        <parameter>
+          <name>libraries</name>
+          <type>org.apache.maven.plugin.idea.Library[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>An optional set of Library objects that allow you to specify a comma separated list of source dirs, class dirs,
+or to indicate that the library should be excluded from the module. For example:
+&lt;p/&gt;
+&lt;pre&gt;
+&amp;lt;libraries&amp;gt;
+&amp;lt;library&amp;gt;
+&amp;lt;name&amp;gt;webwork&amp;lt;/name&amp;gt;
+&amp;lt;sources&amp;gt;file://$webwork$/src/java&amp;lt;/sources&amp;gt;
+&amp;lt;!--
+&amp;lt;classes&amp;gt;...&amp;lt;/classes&amp;gt;
+&amp;lt;exclude&amp;gt;true&amp;lt;/exclude&amp;gt;
+--&amp;gt;
+&amp;lt;/library&amp;gt;
+&amp;lt;/libraries&amp;gt;
+&lt;/pre&gt;</description>
+        </parameter>
+        <parameter>
+          <name>linkModules</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether to link the reactor projects as dependency modules or as libraries.</description>
+        </parameter>
+        <parameter>
+          <name>localRepo</name>
+          <type>org.apache.maven.artifact.repository.ArtifactRepository</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>overwrite</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether to update the existing project files or overwrite them.</description>
+        </parameter>
+        <parameter>
+          <name>reactorProjects</name>
+          <type>java.util.List</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description>The reactor projects in a multi-module build.</description>
+        </parameter>
+        <parameter>
+          <name>sourceClassifier</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Sets the classifier string attached to an artifact source archive name.</description>
+        </parameter>
+        <parameter>
+          <name>useFullNames</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Whether to use full artifact names when referencing libraries.</description>
+        </parameter>
+        <parameter>
+          <name>wildcardResourcePatterns</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Specify the resource pattern in wildcard format, for example &quot;?*.xml;?*.properties&quot;.
+Currently supports 4.x and 5.x.
+Because IDEA doesn&apos;t distinguish between source and resources directories, this is needed.
+The default value corresponds to any file without a java extension.
+Please note that the default value includes package.html files as it&apos;s not possible to exclude those.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <sourceClassifier implementation="java.lang.String" default-value="sources">${sourceClassifier}</sourceClassifier>
+        <dependenciesAsLibraries implementation="boolean" default-value="false"/>
+        <downloadJavadocs implementation="boolean" default-value="false">${downloadJavadocs}</downloadJavadocs>
+        <reactorProjects implementation="java.util.List">${reactorProjects}</reactorProjects>
+        <executedProject implementation="org.apache.maven.project.MavenProject">${executedProject}</executedProject>
+        <ideaPlugin implementation="boolean" default-value="false"/>
+        <jdkName implementation="java.lang.String">${jdkName}</jdkName>
+        <javadocClassifier implementation="java.lang.String" default-value="javadoc">${javadocClassifier}</javadocClassifier>
+        <deploymentDescriptorFile implementation="java.lang.String">${deploymentDescriptorFile}</deploymentDescriptorFile>
+        <downloadSources implementation="boolean" default-value="false">${downloadSources}</downloadSources>
+        <linkModules implementation="boolean" default-value="true">${linkModules}</linkModules>
+        <overwrite implementation="boolean" default-value="false">${overwrite}</overwrite>
+        <jdkLevel implementation="java.lang.String">${jdkLevel}</jdkLevel>
+        <localRepo implementation="org.apache.maven.artifact.repository.ArtifactRepository">${localRepository}</localRepo>
+        <useFullNames implementation="boolean" default-value="false">${useFullNames}</useFullNames>
+        <ideaVersion implementation="java.lang.String" default-value="5.x">${ideaVersion}</ideaVersion>
+        <wildcardResourcePatterns implementation="java.lang.String" default-value="!?*.java">${wildcardResourcePatterns}</wildcardResourcePatterns>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.artifact.manager.WagonManager</role>
+          <field-name>wagonManager</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.metadata.ArtifactMetadataSource</role>
+          <field-name>artifactMetadataSource</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.resolver.ArtifactResolver</role>
+          <field-name>artifactResolver</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.factory.ArtifactFactory</role>
+          <field-name>artifactFactory</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>touch</goal>
+      <description>Goal which touches a timestamp file.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>process-sources</phase>
+      <implementation>com.taobao.maven.MyMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <parameters>
+        <parameter>
+          <name>outputDirectory</name>
+          <type>java.io.File</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Location of the file.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <outputDirectory implementation="java.io.File">${project.build.directory}</outputDirectory>
+      </configuration>
+    </mojo>
+  </mojos>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.reporting</groupId>
+      <artifactId>maven-reporting-api</artifactId>
+      <type>jar</type>
+      <version>3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-sink-api</artifactId>
+      <type>jar</type>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <type>jar</type>
+      <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <type>jar</type>
+      <version>1.0.b2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <type>jar</type>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-interpolation</artifactId>
+      <type>jar</type>
+      <version>1.11</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <type>jar</type>
+      <version>1.0-alpha-9-stable-1</version>
+    </dependency>
+    <dependency>
+      <groupId>classworlds</groupId>
+      <artifactId>classworlds</artifactId>
+      <type>jar</type>
+      <version>1.1-alpha-2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-profile</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact-manager</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-repository-metadata</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+      <type>jar</type>
+      <version>1.0-beta-6</version>
+    </dependency>
+    <dependency>
+      <groupId>backport-util-concurrent</groupId>
+      <artifactId>backport-util-concurrent</artifactId>
+      <type>jar</type>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-registry</artifactId>
+      <type>jar</type>
+      <version>2.2.1</version>
+    </dependency>
+  </dependencies>
+</plugin>
