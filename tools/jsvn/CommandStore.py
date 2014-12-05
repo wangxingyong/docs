@@ -36,6 +36,8 @@ def initCommand():
     CommandFactory.registerCommand(CommandSvn.MergeRm())
     CommandFactory.registerCommand(CommandSvn.MergeCI())
 
+
+    CommandFactory.registerCommand(CommandMaven.MavenAllPom())
     CommandFactory.registerCommand(CommandMaven.MavenInstall())
     CommandFactory.registerCommand(CommandMaven.Idea())
     CommandFactory.registerCommand(CommandMaven.Eclipse())

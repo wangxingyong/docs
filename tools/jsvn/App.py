@@ -43,7 +43,10 @@ class App:
 #        print "local path: ",localPath
         self.workDir = self.userHome+"/work/"+localPath
         self.mergeDir = self.userHome+"/merge/"+localPath
+        self.workPath = localPath
 
+    def getWorkPath(self):
+        return self.workPath
 
     def __getValue(self, key, default=None):
 #        print "sssssssssss333",self.id,key

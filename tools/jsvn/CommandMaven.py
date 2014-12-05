@@ -12,30 +12,69 @@ import os
 import Log
 
 
+class MavenAllPom(CommandBase):
+    def init(self):
+    	self._newThread = False
+        self._commandName = "pom"
+        self.allPomData="""<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>alibaba.intl.jsvn.all.pom</artifactId>
+    <packaging>pom</packaging>
+    <groupId>com.alibaba.intl.app</groupId>
+    <version>1.0-SNAPSHOT</version>
+    <name>jsvn_all</name>
+    <description>jsvn all project</description>
+    
+    <modules>
+"""
+
+    def runApp(self, envContext, app):
+        sr = None
+        mavenDest = envContext.getHomeDir()+"/.m2/repository"
+        mavenLd = LinkerDir("/wxy/my_work_home/alibaba/.m2/repository", mavenDest)
+        appReleasePath = app.getReleasePathMaven();
+#        print appReleasePath
+#        return sr
+        mavenLd.makeDir(appReleasePath)
+        if app.isBiz():
+	    self.allPomData += "<module>"+app.getWorkPath()+"/pom.xml</module>\n"
+        else:
+	    self.allPomData += "<module>"+app.getWorkPath()+"/all/pom.xml</module>\n"
+        return sr
+
+    def _endRun(self,envContext):
+	self.allPomData +=     "\n</modules>"
+	self.allPomData += "\n</project>"
+
+#	print self.allPomData
+	
+	allPomFilePath = envContext.getWorkDir()+"/pom.xml"
+	allPomFile = open(allPomFilePath, "w")
+	allPomFile.write(self.allPomData+"\n")
+	allPomFile.close()
+
+
+
 class MavenBase(CommandBase):
     def init(self):
-	self._newThread = False
-	self.allPomData="""<?xml version="1.0" encoding="UTF-8"?>
+        self._newThread = False
+        self.allPomData="""<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	
-	<!--parent>
-		<groupId>com.alibaba.intl.sourcing.shared</groupId>
-		<artifactId>intl.base</artifactId>
-		<version>3.0.640</version>
-	</parent-->
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>alibaba.intl.jsvn.all.pom</artifactId>
-	<packaging>pom</packaging>
-	<groupId>com.alibaba.intl.app</groupId>
-	<version>1.0-SNAPSHOT</version>
-	<name>jsvn_all</name>
-	<description>jsvn all project</description>
-	
-	<modules>
+    <artifactId>alibaba.intl.jsvn.all.pom</artifactId>
+    <packaging>pom</packaging>
+    <groupId>com.alibaba.intl.app</groupId>
+    <version>1.0-SNAPSHOT</version>
+    <name>jsvn_all</name>
+    <description>jsvn all project</description>
+    
+    <modules>
 """
-#		<module>../web/pfs</module>
-#	</modules>
+#       <module>../web/pfs</module>
+#   </modules>
 
 
     def runApp(self, envContext, app):
@@ -47,27 +86,25 @@ class MavenBase(CommandBase):
 #        return sr
         mavenLd.makeDir(appReleasePath)
         if app.isBiz():
-	    self.allPomData += "<module>../../../../.."+app.getWorkDir()+"/pom.xml</module>\n"
+            self.allPomData += "<module>../../../../.."+app.getWorkDir()+"/pom.xml</module>\n"
         else:
-	    self.allPomData += "<module>../../../../.."+app.getWorkDir()+"/all/pom.xml</module>\n"
+            self.allPomData += "<module>../../../../.."+app.getWorkDir()+"/all/pom.xml</module>\n"
         return sr
 
     def _endRun(self,envContext):
-	self.allPomData +=     "\n</modules>"
-	self.allPomData += "\n</project>"
+        self.allPomData +=     "\n</modules>"
+        self.allPomData += "\n</project>"
 
-#	print self.allPomData
-	
-	allPomFilePath = envContext.getLogDir()+"/pom.xml"
-	allPomFile = open(allPomFilePath, "w")
-	allPomFile.write(self.allPomData+"\n")
-	allPomFile.close()
-	self._execCmd(envContext, envContext.getLogDir())
+#   print self.allPomData
+    
+        allPomFilePath = envContext.getLogDir()+"/pom.xml"
+        allPomFile = open(allPomFilePath, "w")
+        allPomFile.write(self.allPomData+"\n")
+        allPomFile.close()
+        self._execCmd(envContext, envContext.getLogDir())
    
     def _execCmd(self,envContext, allPomDir):
-	pass
-
-	
+        pass	
 
 
 class Eclipse(MavenBase):
