@@ -45,7 +45,6 @@ mkdir -p $WORKDIR
 
 
 echo "5. copy commons, resources, templates"
-#svn co http://svn.alibaba-inc.com/repos/ali_intl/apps/intl-base/trunk/ $WORKDIR/intl-base
 
 svn up ${MY_WORK_HOME}/alibaba/work/intl-resources
 ln -s ${MY_WORK_HOME}/alibaba/work/intl-resources $WORKDIR
