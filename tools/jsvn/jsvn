@@ -1,7 +1,0 @@
-#!/bin/bash
-
-PYTHON_SVN_HOME=/usr/ali-tool/python.src
-cmd="$PYTHON_SVN_HOME/Start.py $@"
-
-#echo $cmd
-exec $cmd
