@@ -23,4 +23,4 @@ echo "proxy user home is: $USER_HOME"
 # export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"
 #${M2_HOME}/bin/mvn $USER_HOME $@ -DdownloadSources=true -Dmaven.test.skip -Declipse.useProjectReferences=false -Dno.private.repo
 
-${M2_HOME}/bin/mvn $@ -DdownloadSources=true -Dmaven.test.skip -Declipse.useProjectReferences=false -Dno.private.repo
+${M2_HOME}/bin/mvn $@ -DdownloadSources=true -Dmaven.test.skip -Declipse.useProjectReferences=false -Dno.private.repo -Didea.linkModules=false
