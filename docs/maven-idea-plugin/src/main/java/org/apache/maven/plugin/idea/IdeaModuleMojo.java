@@ -483,7 +483,7 @@ public class IdeaModuleMojo
             }
             else
             {
-                moduleName = a.getArtifactId();
+                moduleName = a.getArtifactId() +"-"+a.getVersion();
             }
 
             Element dep = (Element) modulesByName.get( moduleName );
