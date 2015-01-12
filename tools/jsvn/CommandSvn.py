@@ -67,9 +67,25 @@ class CO(CommandBase):
 
 
         cmd = "svn co "+app.getSvn()+" "+workDir
+
+#        Log.info("jsvn co: "+cmd)
+
+        toDir = envContext.getArgs().getParameter(0, None)
+        if "work" == toDir or toDir == None:
+            bizDir = self.bizDir(app)
+            if bizDir != None:
+                cmd += "; cd "+envContext.getHomeDir()+"/work; mkdir -p biz_folder/"+bizDir+"; cd biz_folder/"+bizDir+"; ln -s "+workDir
+
         Log.info("jsvn co: "+cmd)
-#        print workDir
         return self.execCommandFile(envContext, cmd, app.getId())
+    
+    def bizDir(self, app):
+        bizPath = app.getBizPath()
+        if bizPath == None:
+            return None
+        i = bizPath.rindex("/")
+        return bizPath[0:i]
+
 
 class ST(CommandBase):
     def init(self):

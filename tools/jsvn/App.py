@@ -193,6 +193,10 @@ class App:
             return self.svnPre
         else:
             return svnPre
+            
+    def getBizPath(self):
+        bizPath = self.svnConf.getBizPath(self.id)
+        return bizPath
 
     def getCPMessage(self):
         return self.cpMessage

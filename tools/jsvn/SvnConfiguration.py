@@ -9,8 +9,21 @@ class SvnModule:
         self.localPath=localPath
         self.app=app
         self.svn=svn
+
+        s = "http://svn.alibaba-inc.com/repos/ali_sourcing/system/business/(.*)"
+#        s += "/[(business)|(technology)]/(.*)"
+        s += "/[(branches)|(tags)|(trunk)]"
+        rcompile = re.compile(s)
+        rs = rcompile.search(svn)
+ #r       print svn,"XXXXXXX",rs
+        if rs != None:
+            self.bizPath = rs.group(1)
+#            print self.bizPath,"========"
+
     def getApp(self):
         return self.app
+    def getBizPath(self):
+        return self.bizPath
     def getModule(self):
         return self.module
     def getLocalPath(self):
@@ -111,7 +124,11 @@ class SvnConfiguration:
     def getSvnPre(self, appName):
         return self._findMoule(self.svnPreModuleList, appName).getSvn()
 
+    def getBizPath(self, appName):
+        return self._findMoule(self.svnModuleList, appName).getBizPath()
+    
     def getSvn(self, appName):
+#        print "Module :",self._findMoule(self.svnModuleList, appName)
         return self._findMoule(self.svnModuleList, appName).getSvn()
 
     def getLocalPath(self, appName):
@@ -180,11 +197,14 @@ class SvnConfiguration:
             return None
 
     def _findMoule(self, svnModuleList, appName):
+#        print "findModule",appName
         if appName == None:
             return None    
         for module in svnModuleList:
             lp = module.getLocalPath()
-            if lp==appName or lp.find(appName) > 0:
+#            print "find module", lp,appName,lp.find(appName)
+            if lp==appName or lp.find(appName) != -1:
+#                print "zhao dao module",module
                 return module
         return None
 
@@ -330,9 +350,15 @@ def testParseSvn():
     m = sc._parseSvnModule(svn)
     print m,m.getApp(),m.getModule(),m.getLocalPath()
 
+def testString():
+    bp ="shipping/modules/tracking"
+    print bp.rindex("/"),bp[0:16]
 #test()
 #testLocalPath()
 
 #testLocalPathNew()
 
+#testString()
+
 #testParseSvn()
+

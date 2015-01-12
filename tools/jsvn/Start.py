@@ -3,6 +3,7 @@ from AppConfigStore import AppConfigStore
 import sys
 from Main import Main
 from Args import Args
+import traceback
 
 configDir = "/home/wxy/svn-config"
 
@@ -25,7 +26,13 @@ else:
 args.addOption(Args.OPTION_CONFIG, config)
 
 AppConfigStore.build(configDir+"/apps.cfg")
-main = Main(args)
-main.execute()
-
+try:
+	main = Main(args)
+	main.execute()
+except Exception, e:
+	exstr = traceback.format_exc(),"======"
+	print exstr
+except Error, e:
+	exstr = traceback.format_exc(),"======"
+	print exstr
 
